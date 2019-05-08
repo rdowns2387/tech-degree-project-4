@@ -16,9 +16,15 @@
     }
   });
 
-  //run the handleInteraction function when a keyboard button is typed
-  document.addEventListener("keypress", function(e){
-    let keys = document.querySelectorAll('.key');
-    let button = `${e.key}`;
-    game.handleInteraction(button);
-  });
+
+  //When a key is pressed, check its key value against keysArray textContent values; if the value is included, trigger the click event to run the code on line 11 and start the handleInteraction method
+    document.addEventListener("keydown", function(e) {
+      let keys = document.querySelectorAll('.key');
+      let keysArray = [];
+      keys.forEach(key => keysArray.push(key));
+      for (let i = 0; i < keysArray.length; i++) {
+        if (e.key == $(keysArray[i]).text()) {
+          $(keysArray[i]).trigger("click");
+        }
+      }
+    });
