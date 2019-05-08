@@ -2,12 +2,26 @@
  * Project 4 - OOP Game App
  * Game.js */
 
+
+  //My Variables
+  let overlay = document.getElementById('overlay');
+  let message = document.getElementById('game-over-message');
+  let keys = document.querySelectorAll('.key');
+  let hearts = document.querySelector('ol').children;
+
+
+
+
  class Game {
    constructor(){
      this.missed =  0;
      this.phrases =  this.createPhrases();
      this.activePhrase =  null ;
    }
+
+
+
+
 
    /**
    * Creates phrases for use in game
@@ -59,13 +73,9 @@
     let isHide = document.querySelectorAll('.hide');
     let hideArray = [];
     isHide.forEach(hide => hideArray.push(hide));
-    console.log(hideArray.length);
     if(hideArray.length === 0){
       return true
-      console.log('winner winner chicken dinner')
-
     } else {
-      console.log('something is still hidden')
       return false
     }
    }
@@ -77,11 +87,7 @@
    */
    removeLife() {
      this.missed += 1;
-
-     let liveHearts = document.querySelector('ol').children;
-
-     liveHearts[`${this.missed}`-1].firstElementChild.src = 'images/lostHeart.png';
-     console.log(this.missed);
+     hearts[`${this.missed}`-1].firstElementChild.src = 'images/lostHeart.png';
      if(this.missed === 5){
        game.gameOver(false);
      }
@@ -92,49 +98,37 @@
    * @param {boolean} gameWon - Whether or not the user won the game
    */
    gameOver(gameWon) {
-     let overlay = document.getElementById('overlay');
-     let message = document.getElementById('game-over-message');
-
+     //bring back the overlay
      overlay.style.display = "flex";
 
-
+     //if the game is won, change the message HTML and the overlay's class to win
      if(gameWon){
-       message.innerHTML = 'You won!';
+       message.innerHTML = 'Ganon is defeated and Zelda is saved!';
        overlay.classList.remove('start');
        overlay.classList.add('win');
        game.reset();
-
-
      } else {
-       message.innerHTML = 'GAME OVER';
+       //if the game is lost, change the message HTML and the overlay's class to lose
+       message.innerHTML = 'No more heart containers...';
        overlay.classList.remove('start');
        overlay.classList.add('lose');
        game.reset();
      }
-
    };
+
 
    reset(){
      document.getElementById('btn__reset').addEventListener('click', function(){
-     let gamePhrase = document.querySelector('ul');
-     let keys = document.querySelectorAll('.key');
-     let resetHearts = document.querySelector('ol').children;
-     let overlay = document.getElementById('overlay');
-     let message = document.getElementById('game-over-message');
+     let gamePhraseArea = document.querySelector('ul');
 
-     console.log(resetHearts);
-
-
-
-     //get rid of the old phrase
-     gamePhrase.innerHTML = '';
+     //remove the old phrase from the screen
+     gamePhraseArea.innerHTML = '';
 
      //remove the chosen and wrong classes from the qwerty keyboard and enable all disabled buttons
      for (let i = 0; i < keys.length; i++){
        if (keys[i].classList.contains('chosen')){
          keys[i].classList.remove('chosen');
          keys[i].disabled=false;
-
        }
        if (keys[i].classList.contains('wrong')){
          keys[i].classList.remove('wrong');
@@ -143,13 +137,13 @@
       }
 
       //reset the heart images
-      for (let i = 0; i < resetHearts.length; i++){
-        if (resetHearts[i].firstElementChild.src = "images/lostHeart.png"){
-          resetHearts[i].firstElementChild.src = "images/liveHeart.png";
+      for (let i = 0; i < hearts.length; i++){
+        if (hearts[i].firstElementChild.src = "images/lostHeart.png"){
+          hearts[i].firstElementChild.src = "images/liveHeart.png";
         }
       }
 
-      //reset the this.missed constructor
+      //reset the this.missed constructor to 0
       this.missed = 0;
 
       //remove the overlay background color and game message text
@@ -157,10 +151,8 @@
       overlay.classList.remove('win');
       document.getElementById('game-over-message').innerHTML = " ";
 
-
-
-     game.startGame();
-
+      //initialize a new game
+      game.startGame();
     });
   }
 
@@ -169,44 +161,35 @@
    * @param (HTMLButtonElement) button - The clicked button element
    */
    handleInteraction(button) {
-     console.log(button);
 
-     let gamePhrase = document.querySelectorAll('.key');
+     //call the Phrase class to use its methods
      const phrase = new Phrase(this.activePhrase.phrase);
 
-     //disable the button
 
-     // letterToBeDisabled.setAttribute('disabled', true);
-       console.log(`${button} button is now disabled` );
-
-
-     //if letter is in active phrase, mark the qwerty letter as correct, show the letter in the phrase
+     //if chosen letter is in active phrase, add the chosen class the onscreen letter and unhide the letter in the phrase and disable it from being used again
      if(phrase.checkLetter(`${button}`)){
-       console.log('this is a correct guess');
        phrase.showMatchedLetter(button);
-       for (let i = 0; i < gamePhrase.length; i ++){
-         if(gamePhrase[i].innerText === `${button}`){
-           gamePhrase[i].classList.add('chosen');
-           //disable the button
-           gamePhrase[i].disabled=true;
+       for (let i = 0; i < keys.length; i ++){
+         if(keys[i].innerText === `${button}`){
+           keys[i].classList.add('chosen');
+           keys[i].disabled=true;
          }
        }
+       //check if the game has been won
        if(game.checkForWin(true)){
          game.gameOver(true);
        };
      }else {
-       console.log('this is an incorrect guess');
-       // remove a heart
+       // remove a heart container
        game.removeLife();
-       // add the wrong class to qwerty button
-       for (let i = 0; i < gamePhrase.length; i ++){
-         if(gamePhrase[i].innerText === `${button}`){
-           gamePhrase[i].classList.add('wrong');
-           //disable the button
-           gamePhrase[i].disabled=true;
+
+       // add the 'wrong' class to onscreen button
+       for (let i = 0; i < keys.length; i ++){
+         if(keys[i].innerText === `${button}`){
+           keys[i].classList.add('wrong');
+           keys[i].disabled=true;
          }
        }
      }
-
    }
 }

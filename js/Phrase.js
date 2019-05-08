@@ -2,6 +2,7 @@
  * Project 4 - OOP Game App
  * Phrase.js */
 
+
  class Phrase {
   constructor(phrase){
     this.phrase = phrase.toLowerCase();
@@ -12,7 +13,11 @@
   */
   addPhraseToDisplay() {
     let displayBlocks = document.getElementById('phrase').firstElementChild;
+
+    //split the active phrase
     let splitPhrase = this.phrase.split("");
+
+    //iterate over the active phrase and create space and hidden letter blocks
     for (let i = 0; i < splitPhrase.length; i++){
       if (splitPhrase[i] === " "){
         displayBlocks.innerHTML += '<li class="space"> </li>';

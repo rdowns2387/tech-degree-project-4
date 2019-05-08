@@ -8,6 +8,7 @@
       game.startGame();
    });
 
+  //run the handleInteraction function when an onscreen button is clicked
   document.querySelector("#qwerty").addEventListener("click", function(e){
     if(e.target && e.target.className === "key"){
       let button = e.target.innerHTML;
@@ -15,11 +16,9 @@
     }
   });
 
+  //run the handleInteraction function when a keyboard button is typed
   document.addEventListener("keypress", function(e){
     let keys = document.querySelectorAll('.key');
     let button = `${e.key}`;
-
     game.handleInteraction(button);
-
-
   });
