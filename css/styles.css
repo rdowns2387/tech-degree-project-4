@@ -176,11 +176,15 @@ button {
 }
 
 .title {
-  color: #FFF;
+  /* color: #FFF; */
+  color: #000;
 }
 
 .start {
-  background-color: #3a3f58;
+  background-image: url('../images/links.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .start a {
@@ -196,7 +200,9 @@ button {
 }
 
 .lose {
-  background-color: #f5785f;
+  background-image: url('../images/gameOver.jpg');
+  background-position: center;
+  background-size: auto;
 }
 
 .lose a {
